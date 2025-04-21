@@ -1,0 +1,24 @@
+{
+  "name": "echo-token",
+  "version": "1.0.0",
+  "description": "echo token contracts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onchainsupply/echo-token.git"
+  },
+  "keywords": [
+    "echotoken",
+    "omnitoken",
+    "erc20"
+  ],
+  "author": "raldblox",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/onchainsupply/echo-token/issues"
+  },
+  "homepage": "https://github.com/onchainsupply/echo-token#readme"
+}
