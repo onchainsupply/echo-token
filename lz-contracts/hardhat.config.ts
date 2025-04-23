@@ -52,19 +52,34 @@ const config: HardhatUserConfig = {
         ],
     },
     networks: {
-        'optimism-testnet': {
-            eid: EndpointId.OPTSEP_V2_TESTNET,
-            url: process.env.RPC_URL_OP_SEPOLIA || 'https://optimism-sepolia.gateway.tenderly.co',
-            accounts,
-        },
-        'avalanche-testnet': {
-            eid: EndpointId.AVALANCHE_V2_TESTNET,
-            url: process.env.RPC_URL_FUJI || 'https://avalanche-fuji.drpc.org',
+        'sepolia-testnet': {
+            eid: EndpointId.SEPOLIA_V2_TESTNET,
+            url: 'https://rpc.sepolia.org/',
             accounts,
         },
         'arbitrum-testnet': {
             eid: EndpointId.ARBSEP_V2_TESTNET,
             url: process.env.RPC_URL_ARB_SEPOLIA || 'https://arbitrum-sepolia.gateway.tenderly.co',
+            accounts,
+        },
+        'amoy-testnet': {
+            eid: EndpointId.AMOY_V2_TESTNET,
+            url: 'https://rpc-amoy.polygon.technology/',
+            accounts,
+        },
+        'etherlink-testnet': {
+            eid: EndpointId.ETHERLINK_V2_TESTNET,
+            url: 'https://node.ghostnet.etherlink.com/',
+            accounts,
+        },
+        'core-testnet': {
+            eid: EndpointId.COREDAO_V2_TESTNET,
+            url: 'https://rpc.test.btcs.network/',
+            accounts,
+        },
+        'base-testnet': {
+            eid: EndpointId.BASE_V2_TESTNET,
+            url: 'https://sepolia.base.org/',
             accounts,
         },
         hardhat: {

@@ -1,8 +1,9 @@
 import assert from 'assert'
+import { ethers } from 'hardhat'
 
 import { type DeployFunction } from 'hardhat-deploy/types'
 
-const contractName = 'MyOFT'
+const contractName = 'EchoOFT'
 
 const deploy: DeployFunction = async (hre) => {
     const { getNamedAccounts, deployments } = hre
@@ -36,10 +37,12 @@ const deploy: DeployFunction = async (hre) => {
     const { address } = await deploy(contractName, {
         from: deployer,
         args: [
-            'MyOFT', // name
-            'MOFT', // symbol
+            'Echo', // name
+            'ECHO', // symbol
+            ethers.utils.parseEther('100'), // totalSupply
+            deployer, // recipient
             endpointV2Deployment.address, // LayerZero's EndpointV2 address
-            deployer, // owner
+            deployer, // delegate
         ],
         log: true,
         skipIfAlreadyDeployed: false,

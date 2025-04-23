@@ -1,73 +1,172 @@
 import { EndpointId } from '@layerzerolabs/lz-definitions'
-import { ExecutorOptionType } from '@layerzerolabs/lz-v2-utilities'
-import { TwoWayConfig, generateConnectionsConfig } from '@layerzerolabs/metadata-tools'
-import { OAppEnforcedOption } from '@layerzerolabs/toolbox-hardhat'
-
-import type { OmniPointHardhat } from '@layerzerolabs/toolbox-hardhat'
-
-const optimismContract: OmniPointHardhat = {
-    eid: EndpointId.OPTSEP_V2_TESTNET,
-    contractName: 'MyOFT',
+const amoy_testnetContract = {
+    eid: EndpointId.AMOY_V2_TESTNET,
+    contractName: 'EchoOFT',
 }
-
-const avalancheContract: OmniPointHardhat = {
-    eid: EndpointId.AVALANCHE_V2_TESTNET,
-    contractName: 'MyOFT',
-}
-
-const arbitrumContract: OmniPointHardhat = {
+const arbitrum_testnetContract = {
     eid: EndpointId.ARBSEP_V2_TESTNET,
-    contractName: 'MyOFT',
+    contractName: 'EchoOFT',
 }
-
-// To connect all the above chains to each other, we need the following pathways:
-// Optimism <-> Avalanche
-// Optimism <-> Arbitrum
-// Avalanche <-> Arbitrum
-
-// For this example's simplicity, we will use the same enforced options values for sending to all chains
-// For production, you should ensure `gas` is set to the correct value through profiling the gas usage of calling OFT._lzReceive(...) on the destination chain
-// To learn more, read https://docs.layerzero.network/v2/concepts/applications/oapp-standard#execution-options-and-enforced-settings
-const EVM_ENFORCED_OPTIONS: OAppEnforcedOption[] = [
-    {
-        msgType: 1,
-        optionType: ExecutorOptionType.LZ_RECEIVE,
-        gas: 80000,
-        value: 0,
-    },
-]
-
-// With the config generator, pathways declared are automatically bidirectional
-// i.e. if you declare A,B there's no need to declare B,A
-const pathways: TwoWayConfig[] = [
-    [
-        optimismContract, // Chain A contract
-        avalancheContract, // Chain B contract
-        [['LayerZero Labs'], []], // [ requiredDVN[], [ optionalDVN[], threshold ] ]
-        [1, 1], // [A to B confirmations, B to A confirmations]
-        [EVM_ENFORCED_OPTIONS, EVM_ENFORCED_OPTIONS], // Chain B enforcedOptions, Chain A enforcedOptions
+const core_testnetContract = {
+    eid: EndpointId.COREDAO_V2_TESTNET,
+    contractName: 'EchoOFT',
+}
+export default {
+    contracts: [
+        { contract: amoy_testnetContract },
+        { contract: arbitrum_testnetContract },
+        { contract: core_testnetContract },
     ],
-    [
-        optimismContract, // Chain A contract
-        arbitrumContract, // Chain C contract
-        [['LayerZero Labs'], []], // [ requiredDVN[], [ optionalDVN[], threshold ] ]
-        [1, 1], // [A to B confirmations, B to A confirmations]
-        [EVM_ENFORCED_OPTIONS, EVM_ENFORCED_OPTIONS], // Chain C enforcedOptions, Chain A enforcedOptions
+    connections: [
+        {
+            from: amoy_testnetContract,
+            to: arbitrum_testnetContract,
+            config: {
+                sendLibrary: '0x1d186C560281B8F1AF831957ED5047fD3AB902F9',
+                receiveLibraryConfig: { receiveLibrary: '0x53fd4C4fBBd53F6bC58CaE6704b92dB1f360A648', gracePeriod: 0 },
+                sendConfig: {
+                    executorConfig: { maxMessageSize: 10000, executor: '0x4Cf1B3Fa61465c2c907f82fC488B43223BA0CF93' },
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x55c175DD5b039331dB251424538169D8495C18d1'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x55c175DD5b039331dB251424538169D8495C18d1'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+            },
+        },
+        {
+            from: amoy_testnetContract,
+            to: core_testnetContract,
+            config: {
+                sendLibrary: '0x1d186C560281B8F1AF831957ED5047fD3AB902F9',
+                receiveLibraryConfig: { receiveLibrary: '0x53fd4C4fBBd53F6bC58CaE6704b92dB1f360A648', gracePeriod: 0 },
+                sendConfig: {
+                    executorConfig: { maxMessageSize: 10000, executor: '0x4Cf1B3Fa61465c2c907f82fC488B43223BA0CF93' },
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x55c175DD5b039331dB251424538169D8495C18d1'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x55c175DD5b039331dB251424538169D8495C18d1'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+            },
+        },
+        {
+            from: arbitrum_testnetContract,
+            to: amoy_testnetContract,
+            config: {
+                sendLibrary: '0x4f7cd4DA19ABB31b0eC98b9066B9e857B1bf9C0E',
+                receiveLibraryConfig: { receiveLibrary: '0x75Db67CDab2824970131D5aa9CECfC9F69c69636', gracePeriod: 0 },
+                sendConfig: {
+                    executorConfig: { maxMessageSize: 10000, executor: '0x5Df3a1cEbBD9c8BA7F8dF51Fd632A9aef8308897' },
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x53f488E93b4f1b60E8E83aa374dBe1780A1EE8a8'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x53f488E93b4f1b60E8E83aa374dBe1780A1EE8a8'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+            },
+        },
+        {
+            from: arbitrum_testnetContract,
+            to: core_testnetContract,
+            config: {
+                sendLibrary: '0x4f7cd4DA19ABB31b0eC98b9066B9e857B1bf9C0E',
+                receiveLibraryConfig: { receiveLibrary: '0x75Db67CDab2824970131D5aa9CECfC9F69c69636', gracePeriod: 0 },
+                sendConfig: {
+                    executorConfig: { maxMessageSize: 10000, executor: '0x5Df3a1cEbBD9c8BA7F8dF51Fd632A9aef8308897' },
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x53f488E93b4f1b60E8E83aa374dBe1780A1EE8a8'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0x53f488E93b4f1b60E8E83aa374dBe1780A1EE8a8'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+            },
+        },
+        {
+            from: core_testnetContract,
+            to: amoy_testnetContract,
+            config: {
+                sendLibrary: '0xc8361Fac616435eB86B9F6e2faaff38F38B0d68C',
+                receiveLibraryConfig: { receiveLibrary: '0xD1bbdB62826eDdE4934Ff3A4920eB053ac9D5569', gracePeriod: 0 },
+                sendConfig: {
+                    executorConfig: { maxMessageSize: 10000, executor: '0x3Bdb89Df44e50748fAed8cf851eB25bf95f37d19' },
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0xAe9BBF877BF1BD41EdD5dfc3473D263171cF3B9e'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0xAe9BBF877BF1BD41EdD5dfc3473D263171cF3B9e'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+            },
+        },
+        {
+            from: core_testnetContract,
+            to: arbitrum_testnetContract,
+            config: {
+                sendLibrary: '0xc8361Fac616435eB86B9F6e2faaff38F38B0d68C',
+                receiveLibraryConfig: { receiveLibrary: '0xD1bbdB62826eDdE4934Ff3A4920eB053ac9D5569', gracePeriod: 0 },
+                sendConfig: {
+                    executorConfig: { maxMessageSize: 10000, executor: '0x3Bdb89Df44e50748fAed8cf851eB25bf95f37d19' },
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0xAe9BBF877BF1BD41EdD5dfc3473D263171cF3B9e'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+                receiveConfig: {
+                    ulnConfig: {
+                        confirmations: 1,
+                        requiredDVNs: ['0xAe9BBF877BF1BD41EdD5dfc3473D263171cF3B9e'],
+                        optionalDVNs: [],
+                        optionalDVNThreshold: 0,
+                    },
+                },
+            },
+        },
     ],
-    [
-        avalancheContract, // Chain B contract
-        arbitrumContract, // Chain C contract
-        [['LayerZero Labs'], []], // [ requiredDVN[], [ optionalDVN[], threshold ] ]
-        [1, 1], // [A to B confirmations, B to A confirmations]
-        [EVM_ENFORCED_OPTIONS, EVM_ENFORCED_OPTIONS], // Chain C enforcedOptions, Chain B enforcedOptions
-    ],
-]
-
-export default async function () {
-    // Generate the connections config based on the pathways
-    const connections = await generateConnectionsConfig(pathways)
-    return {
-        contracts: [{ contract: optimismContract }, { contract: avalancheContract }, { contract: arbitrumContract }],
-        connections,
-    }
 }
