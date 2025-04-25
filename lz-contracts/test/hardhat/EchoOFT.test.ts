@@ -55,12 +55,12 @@ describe('EchoOFT Test', function () {
             'aOFT',
             'aOFT',
             initialAmount,
-            ownerA.address,
             mockEndpointV2A.address,
+            ownerA.address,
             ownerA.address
         )
 
-        EchoOFTB = await EchoOFT.deploy('bOFT', 'bOFT', 0, ownerB.address, mockEndpointV2B.address, ownerB.address)
+        EchoOFTB = await EchoOFT.deploy('bOFT', 'bOFT', 0, mockEndpointV2B.address, ownerB.address, ownerB.address)
 
         // Setting destination endpoints in the LZEndpoint mock for each EchoOFT instance
         await mockEndpointV2A.setDestLzEndpoint(EchoOFTB.address, mockEndpointV2B.address)
